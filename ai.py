@@ -1,8 +1,9 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-import keras 
+from tensorflow import keras 
 import os
-os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+
+# os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 df = pd.read_csv('NewData.csv')
 X = pd.get_dummies(df.drop(['Increase'], axis=1))
@@ -11,8 +12,8 @@ print(y)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2)
 y_train.head()
 
-from tensorflow.keras.models import Sequential, load_model
-from tensorflow.keras.layers import Dense
+from keras.models import Sequential, load_model
+from keras.layers import Dense
 from sklearn.metrics import accuracy_score
 
 model = Sequential()

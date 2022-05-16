@@ -1,0 +1,2 @@
+cd venc\Scripts
+activate
