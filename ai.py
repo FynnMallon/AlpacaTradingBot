@@ -1,10 +1,13 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import keras 
-df = pd.read_csv('StockData.csv')
+import os
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+df = pd.read_csv('NewData.csv')
 X = pd.get_dummies(df.drop(['Increase'], axis=1))
-y = df['Increase'].apply(lambda x: 1 if x=='1' else 0)
-
+y = df['Increase']
+print(y)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2)
 y_train.head()
 
@@ -18,4 +21,7 @@ model.add(Dense(units=64, activation='relu'))
 model.add(Dense(units=1, activation='sigmoid'))
 
 model.compile(loss='binary_crossentropy', optimizer='sgd', metrics='accuracy')
-
+model.fit(X_train, y_train, epochs=200, batch_size=32)
+y_hat = model.predict(X_test)
+y_hat = [0 if val < 0.5 else 1 for val in y_hat]
+accuracy_score(y_test, y_hat)

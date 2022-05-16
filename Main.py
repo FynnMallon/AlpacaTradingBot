@@ -33,8 +33,8 @@ api = REST(
 
 def get_bars():
     # data = open('data.txt', 'w')
-    bars = api.get_bars("IBM",TimeFrame.Minute, "2021-06-14", "2021-06-15", adjustment='raw', limit= None)
-    filename = "StockData.csv"
+    bars = api.get_bars("TSLA",TimeFrame.Minute, "2021-01-01", "2021-06-25", adjustment='raw', limit= None)
+    filename = "NewData.csv"
     csvfields = ['Open','Close','High','Low','Number of Trades','Volume','Volume Weighted Average','Increase']
     csvrows = []
     for bar in bars:
