@@ -20,8 +20,8 @@ model.add(Dense(units=32, activation='relu', input_dim=len(X_train.columns)))
 model.add(Dense(units=64, activation='relu'))
 model.add(Dense(units=1, activation='sigmoid'))
 
-model.compile(loss='binary_crossentropy', optimizer='sgd', metrics='accuracy')
-model.fit(X_train, y_train, epochs=200, batch_size=32)
+model.compile(loss='mean_squared_error', optimizer='adam', metrics='accuracy')
+model.fit(X_train, y_train, epochs=200, batch_size=16)
 y_hat = model.predict(X_test)
 y_hat = [0 if val < 0.5 else 1 for val in y_hat]
 accuracy_score(y_test, y_hat)
