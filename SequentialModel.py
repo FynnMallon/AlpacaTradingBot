@@ -3,7 +3,9 @@
 # x is a numpy array, tensorflow tensor, dict map or tf data
 # y contains the corresponding labels for our data and needs to be in the same format as x
 '''
-
+import os
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 #https://www.youtube.com/watch?v=qFJeN9V1ZsI
 import numpy as np
 from random import randint
@@ -65,5 +67,22 @@ import tensorflow as tf
 from tensorflow import keras 
 from keras.models import Sequential
 from keras.layers import Activation, Dense
-from keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
 from keras.metrics import categorical_crossentropy
+
+model = Sequential([
+    Dense(units=16, input_shape=(1,), activation='relu'),
+    Dense(units=32, activation='relu'),
+    Dense(units=2, activation = 'softmax')
+
+])
+
+model.summary()
+
+#Lesson 2 complete, 24:32
+
+model.compile(optimizer=Adam(learning_rate =0.0001),loss='sparse_categorical_crossentropy',metrics=['Accuracy'])
+
+model.fit(x=scaled_train_samples, y=train_labels, batch_size=10, epochs=30, shuffle=True, verbose=2)
+
+#Lesson 3 complete, 30:06
