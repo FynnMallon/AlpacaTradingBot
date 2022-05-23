@@ -5,6 +5,7 @@
 '''
 from cgi import test
 import os
+import matplotlib
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 #https://www.youtube.com/watch?v=qFJeN9V1ZsI
@@ -26,7 +27,7 @@ Example Data:
 -95% of patients under did not'''
 
 for i in range(50):
-    #5% younger no side effect
+    #5% younger did side effect
     random_younger = randint(13,64)
     train_samples.append(random_younger)
     train_labels.append(1)
@@ -34,7 +35,7 @@ for i in range(50):
     #5% older no side effect
     random_older = randint(65,100)
     train_samples.append(random_older)
-    train_labels.append(1)
+    train_labels.append(0)
     
 for i in range(950):
     #95% younger no side effect
@@ -42,10 +43,10 @@ for i in range(950):
     train_samples.append(random_younger)
     train_labels.append(0)
     
-    #95% older no side effect
+    #95% older did side effect
     random_older = randint(65,100)
     train_samples.append(random_older)
-    train_labels.append(0)
+    train_labels.append(1)
     
 train_labels = np.array(train_labels)
 train_samples = np.array(train_samples)
@@ -68,7 +69,8 @@ import tensorflow as tf
 from tensorflow import keras 
 from keras.models import Sequential
 from keras.layers import Activation, Dense
-from keras.optimizers import Adam
+# from keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
 from keras.metrics import categorical_crossentropy
 
 model = Sequential([
@@ -127,7 +129,7 @@ for i in range(200):
     #95% older no side effect
     random_older = randint(65,100)
     test_samples.append(random_older)
-    test_labels.append(0)
+    test_labels.append(1)
     
 test_labels = np.array(test_labels)
 test_samples = np.array(test_samples)
@@ -138,9 +140,71 @@ scaled_test_samples = scaler.fit_transform(test_samples.reshape(-1,1))
 
 predictions = model.predict(x=scaled_test_samples, batch_size=10, verbose=0)
 
-for i in predictions:
-    print(i)
+# for i in predictions:
+#     print(i)
     
 rounded_predictions = np.argmax(predictions, axis=-1)
-for i in rounded_predictions:
-    print(i)
+# for i in rounded_predictions:
+#     print(i)
+
+from sklearn.metrics import confusion_matrix
+import itertools 
+import matplotlib.pyplot as plt 
+
+cm = confusion_matrix(test_labels, rounded_predictions)
+
+def plot_confusion_matrix (
+    cm, classes, 
+    normalize = False,
+    title = 'Confusion Matrix',
+    cmap = plt.cm.Blues):
+
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        print("Normalized confusion matrix")
+    else:
+        print('Confusion matrix, without normalization')
+
+    print(cm)
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, cm[i, j],
+            horizontalalignment="center",
+            color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+cm_plot_labels = ['no_side_effects','had_side_effects']
+plot_confusion_matrix(cm, cm_plot_labels, title='Confusion Matrix')
+
+#https://github.com/learncsds/Keras-ML-DL-DeepLizard/blob/master/SimpleSequentialModel.ipynb
+
+#lesson complete 53:00
+
+#Saving models
+import os.path
+if os.path.isfile('models/medical_trial_model.h5') is False:
+    model.save('models/medical_trial_model.h5')
+
+#importing models
+from keras.models import load_model
+new_model = load_model('models/medical_trial_model.h5')
+new_model.summary()
+new_model.get_weights()
+model.save_weights('my_model_weights.h5')
+
+#Lesson complete 1:02:21 
+#Image Preparation
+
+#Jump to 1:37:20
+#Jump to 2:25:37
