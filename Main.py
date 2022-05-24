@@ -16,60 +16,26 @@ import numpy as np
 import pandas as pd
 
 import scipy as sc
-import json
 import alpaca_trade_api as tradeapi
 from alpaca_trade_api.rest import REST, TimeFrame
-import sklearn
-from sklearn import datasets
-import matplotlib.pyplot as plt
-import pandas
 import csv
 
 api = REST(
-    'PK1GNWZ4WG3CFDX64EY0',
-    'E3GbOVdeLp5GR6HgOW0dxmzZtqsicsBn7DcXNUFz',
+    'PKUCCTWFOPIZBLWK9D3Q',
+    'FM5ipVhzyQosDDUKRs3BUwZBi4SEqfW4YGKQ0PLr',
     'https://paper-api.alpaca.markets'
-)
+) #API Data
 
 def get_bars():
-    # data = open('data.txt', 'w')
-    bars = api.get_bars("TSLA",TimeFrame.Minute, "2021-01-01", "2021-06-25", adjustment='raw', limit= None)
-    filename = "NewData.csv"
-    csvfields = ['Open','Close','High','Low','Number of Trades','Volume','Volume Weighted Average','Increase']
-    csvrows = []
+    bars = api.get_bars("TSLA",TimeFrame.Minute, "2021-10-01", "2022-04-01", adjustment='raw', limit= None) #Gets raw bars from Alpaca API Market servers
+    filename = "TSLA_Data.csv" #Filename
+    csvrows = [] 
     for bar in bars:
-        # Timestamp = bar.t
-        # Timestamp = str(Timestamp)
-        barinfo = bar.o, bar.c, bar.h, bar.l, bar.n, bar.v, bar.vw
-        # Trade = {
-        # # 'Time' : Timestamp,
-        # 'Open' : bar.o,
-        # 'Close' : bar.c,
-        # 'High' : bar.h,
-        # 'low' : bar.l,
-        # 'Number of Trades' : bar.n,
-        # 'Volume' : bar.v,
-        # 'Volume-Weighted Average' : bar.vw,
-        # }
+        barinfo = bar.o, bar.c, bar.h, bar.l, bar.n, bar.v, bar.vw #Gets all the bar info
         csvrows.append(barinfo)
-    # data.close()
-    print(csvrows)
     with open(filename,'w') as csvfile:
-        csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(csvfields)
+        csvwriter = csv.writer(csvfile, lineterminator='\n') #writes to csv file
         csvwriter.writerows(csvrows)
+    csvfile.close()
         
-def ai():
-    iris_df = datasets.load()
-    print(dir(iris_df))
-    # Features
-    print(iris_df.data)
-
-    # Targets
-    print(iris_df.filename)
-
-    # Target Names
-    print(iris_df.target_names)
-    label = {0: 'red', 1: 'blue', 2: 'green'}
-
 get_bars()

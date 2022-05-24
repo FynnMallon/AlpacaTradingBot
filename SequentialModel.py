@@ -50,6 +50,7 @@ for i in range(950):
     
 train_labels = np.array(train_labels)
 train_samples = np.array(train_samples)
+print(train_samples)
 #Sample Data now converted to a numpy array (Accepted by tensorflow)
 train_labels, train_samples = shuffle(train_labels,train_samples)
 #Shuffles Data (keys linked) to remove any imposed order
