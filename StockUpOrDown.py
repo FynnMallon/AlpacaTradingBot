@@ -59,8 +59,8 @@ def TrainingModel (Training_Data, Training_Labels):
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1' #Hides terminal warnings on program start
     
     
-    if os.path.isfile('models/TSLA_AI.h5') is True:
-        model = load_model('models/TSLA_AI.h5')
+    if os.path.isfile('models/TSLA_AI_HighBatch.h5') is True:
+        model = load_model('models/TSLA_AI_HighBatch.h5')
         print("Loaded Model")
         #Checks if there is a saved model and if so, loads it
     else:
@@ -82,15 +82,16 @@ def TrainingModel (Training_Data, Training_Labels):
     model.fit(x =Training_Data, #The data itself
             y = Training_Labels, #The labelled corrosponding data
             validation_split=0.1, #Splits 10% of the data for validation allowing to see if it is beeing badly overfitted
-            batch_size=100, #Each generation goes through 100 datasets
-            epochs=100, #The ammount of generations
+            batch_size=10000, #Each generation goes through 100 datasets
+            epochs=1000, #The ammount of generations
             shuffle=True, #Again Shuffles input (Note this is done after validation split so it is still important to have my shuffling in the data formation)
             verbose=2 )
     #Runs on the training Data
     
-    model.save('models/TSLA_AI.h5') #Saves the progress
+    model.save('models/TSLA_AI_HighBatch.h5') #Saves the progress
+    
 
-
-for i in range(0,5): #Shuffles data 5 times, helps reduce BIAS
+for i in range(0,2500): #Shuffles data 5 times, helps reduce BIAS
+    print(i)
     Training_Data, Training_Labels = EstablishTrainingData('TSLA_Data.csv')
     TrainingModel(Training_Data, Training_Labels)
