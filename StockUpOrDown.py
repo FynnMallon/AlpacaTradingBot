@@ -39,12 +39,7 @@ def EstablishTrainingData(file):
 
     return(Training_Data, Training_Labels)
 
-time1 = time.time()
-Training_Data, Training_Labels = EstablishTrainingData('TSLA_Data.csv')
-time2 = time.time() 
 #Contemplated saving these datasets to a file so i dont have to process them each time, but upon timing it only takes 0.27seconds so it is not worth it
-
-print(time2-time1)
 
 
 import tensorflow as tf #deep learning library
@@ -88,11 +83,14 @@ def TrainingModel (Training_Data, Training_Labels):
             y = Training_Labels, #The labelled corrosponding data
             validation_split=0.1, #Splits 10% of the data for validation allowing to see if it is beeing badly overfitted
             batch_size=100, #Each generation goes through 100 datasets
-            epochs=1000, #The ammount of generations
+            epochs=100, #The ammount of generations
             shuffle=True, #Again Shuffles input (Note this is done after validation split so it is still important to have my shuffling in the data formation)
             verbose=2 )
     #Runs on the training Data
     
     model.save('models/TSLA_AI.h5') #Saves the progress
-    
-TrainingModel(Training_Data, Training_Labels)
+
+
+for i in range(0,5): #Shuffles data 5 times, helps reduce BIAS
+    Training_Data, Training_Labels = EstablishTrainingData('TSLA_Data.csv')
+    TrainingModel(Training_Data, Training_Labels)
