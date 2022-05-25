@@ -30,10 +30,9 @@ def EstablishTrainingData(file):
     #Converts Data into a Numpy Array (Accepted by TensorFlow)
     Training_Data = np.array(Training_Data)
     Training_Labels = np.array(Training_Labels)
-
     #Shuffles data relative to eachother to remove any imposed order
-    Training_Data, Training_Labels = shuffle(Training_Data,Training_Labels)
-
+    # Training_Data, Training_Labels = shuffle(Training_Data,Training_Labels)
+    #I want imposed order
     #Should I scale data to a 0-1 range to make it easier to train?
     #Could Raise errors with different fields
 
@@ -44,13 +43,13 @@ def EstablishTrainingData(file):
 
 import tensorflow as tf #deep learning library
 from tensorflow import keras #additional, easier to use features, built ontop of and integrated with tensorflow
-from keras.layers import Activation, Dense #Used in the depth of the AI
+from keras.layers import Activation, Dense, Dropout #Used in the depth of the AI
 from keras.metrics import categorical_crossentropy #A type of analysis
 from keras.models import Sequential #The deep learning model i am using
-from keras.optimizers import Adam  # Works on windows
+# from keras.optimizers import Adam  # Works on windows
 from keras.models import load_model #Loads previously saved model
 import os.path 
-#from tensorflow.keras.optimizers import Adam   # Works on mac
+from tensorflow.keras.optimizers import Adam   # Works on mac
 
 
 
@@ -59,14 +58,15 @@ def TrainingModel (Training_Data, Training_Labels):
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1' #Hides terminal warnings on program start
     
     
-    if os.path.isfile('models/TSLA_AI.h5') is True:
-        model = load_model('models/TSLA_AI.h5')
+    if os.path.isfile('models/TSLA_AI_Fresh.h5') is True:
+        model = load_model('models/TSLA_AI_Fresh.h5')
         print("Loaded Model")
         #Checks if there is a saved model and if so, loads it
     else:
         model = Sequential([
-            Dense(units=16, input_shape=(7,), activation='relu'),
+            Dense(units=7, input_shape=(7,), activation='relu'),
             Dense(units=32, activation = 'relu'),
+            Dense(units=16, activation = 'relu'),
             Dense(units=2, activation='softmax')
         ])
         print("Established new model")
@@ -78,20 +78,21 @@ def TrainingModel (Training_Data, Training_Labels):
     model.compile(optimizer=Adam(learning_rate=0.0001),
                 loss = 'sparse_categorical_crossentropy',
                 metrics = ['Accuracy'])
+    print(model.get_weights())
     #compiles the model allowing for it to be run, aiming to increase accuracy
     model.fit(x =Training_Data, #The data itself
             y = Training_Labels, #The labelled corrosponding data
-            validation_split=0.1, #Splits 10% of the data for validation allowing to see if it is beeing badly overfitted
-            batch_size=100, #Each generation goes through 100 datasets
-            epochs=100, #The ammount of generations
-            shuffle=True, #Again Shuffles input (Note this is done after validation split so it is still important to have my shuffling in the data formation)
+            # validation_split=0.1, #Splits 10% of the data for validation allowing to see if it is beeing badly overfitted
+            batch_size=10, #Each generation goes through 100 datasets
+            epochs=50, #The ammount of generations
+            shuffle=False, #Again Shuffles input (Note this is done after validation split so it is still important to have my shuffling in the data formation)
             verbose=2 )
     #Runs on the training Data
     
-    model.save('models/TSLA_AI.h5') #Saves the progress
+    model.save('models/TSLA_AI_Fresh.h5') #Saves the progress
     
 
-for i in range(0,25000): #Shuffles data 5 times, helps reduce BIAS
-    print(i)
-    Training_Data, Training_Labels = EstablishTrainingData('TSLA_Data.csv')
-    TrainingModel(Training_Data, Training_Labels)
+# for i in range(0,25000): #Shuffles data 5 times, helps reduce BIAS
+#     print(i)
+Training_Data, Training_Labels = EstablishTrainingData('TSLA_Data.csv')
+TrainingModel(Training_Data, Training_Labels)
