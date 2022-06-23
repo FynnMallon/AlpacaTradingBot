@@ -21,14 +21,14 @@ from alpaca_trade_api.rest import REST, TimeFrame
 import csv
 
 api = REST(
-    'PKUCCTWFOPIZBLWK9D3Q',
-    'FM5ipVhzyQosDDUKRs3BUwZBi4SEqfW4YGKQ0PLr',
+    'PKR1ED6ACXB64GLNCT0V',
+    '9h8HX2Udky4z8H3RGBv0ew3ITuGvdwcfYvDVUIQg',
     'https://paper-api.alpaca.markets'
 ) #API Data
 
 def get_bars():
-    bars = api.get_bars("TSLA",TimeFrame.Minute, "2021-10-01", "2022-04-01", adjustment='raw', limit= None) #Gets raw bars from Alpaca API Market servers
-    filename = "TSLA_Data.csv" #Filename
+    bars = api.get_bars("TSLA",TimeFrame.Minute, "2022-06-19", "2022-06-19", adjustment='raw', limit= 100) #Gets raw bars from Alpaca API Market servers
+    filename = "TSLA_StubData.csv" #Filename
     csvrows = [] 
     for bar in bars:
         barinfo = bar.o, bar.c, bar.h, bar.l, bar.n, bar.v, bar.vw #Gets all the bar info

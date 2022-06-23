@@ -1,3 +1,6 @@
+
+#Practice File where i learnt how to build and train a sequential model following a tutorial 'https://www.youtube.com/watch?v=qFJeN9V1ZsI'
+
 '''
 # expects 2 inputs x and why
 # x is a numpy array, tensorflow tensor, dict map or tf data
@@ -8,7 +11,7 @@ import os
 import matplotlib
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
-#https://www.youtube.com/watch?v=qFJeN9V1ZsI
+
 import numpy as np
 from random import randint
 from sklearn.utils import shuffle

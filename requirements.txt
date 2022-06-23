@@ -1,0 +1,10 @@
+alpaca_trade_api==2.1.0
+keras==2.9.0
+keras_nightly==2.10.0.dev2022051107
+matplotlib==3.5.2
+numpy==1.22.4
+pandas==1.1.5
+pytz==2021.1
+scikit_learn==1.1.1
+scipy==1.5.4
+tensorflow==2.9.0
